@@ -3,7 +3,7 @@ import threading
 from datetime import datetime
 
 maximum_clients = 10 # Allow up to 10 clients
-port = 12345 
+port = 12345 # Must have the same port address with client
 ip_address = 'localhost'
 
 # ------------- FUNCTION TO HANDLE CLIENT MESSAGES -------------
@@ -17,14 +17,15 @@ def handle_client_messages(client_socket, client_address):
 
     try:
         while True:
-            client_message = client_socket.recv(1024).decode()
-            if not client_message:
+            client_message = client_socket.recv(1024)
+            client_message_decoded =  client_message.decode()
+            if not client_message_decoded:
                 break  
 
             current_time = datetime.now()
-            print(f"[{current_time.strftime('%a %d %b %Y, %I:%M%p')}] Client {client_address[1]}: {client_message}")
+            print(f"[{current_time.strftime('%a %d %b %Y, %I:%M%p')}] Client {client_address[1]}'s message: {client_message_decoded}")
 
-            response = f"Received: {client_message}"
+            response = f"Received: {client_message_decoded}"
             client_socket.sendall(response.encode('utf-8'))
 
     except ConnectionResetError:
@@ -32,7 +33,7 @@ def handle_client_messages(client_socket, client_address):
 
     finally:
         client_socket.close()
-        print(f"[{datetime.now().strftime('%a %d %b %Y, %I:%M%p')}] Connection with Client {client_address[1]} closed.")
+        print(f"[{datetime.now().strftime('%a %d %b %Y, %I:%M%p')}] Connection with Client {client_address[1]} is closed.")
 
 # ------------- START SERVER -------------
 try:

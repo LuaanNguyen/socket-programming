@@ -1,8 +1,7 @@
 import socket
 
-port = 12345
+port = 12345 # Must have the same port address with server
 ip_address = 'localhost'
-
 
 # ------------- START CLIENT -------------
 try:
